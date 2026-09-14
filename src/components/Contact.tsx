@@ -1,6 +1,7 @@
 import Reveal from "./Reveal";
 import Button from "./Button";
 import WhatsAppIcon from "./WhatsAppIcon";
+import OvenDials from "./OvenDials";
 import { site, whatsappHref } from "../data/site";
 
 const items = [
@@ -13,8 +14,11 @@ const items = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="section-pad bg-cocoa text-cream text-center scroll-mt-20">
-      <div className="content-wrap flex flex-col items-center">
+    <section id="contact" className="relative section-pad bg-cocoa text-cream text-center scroll-mt-20 overflow-hidden">
+      <OvenDials side="left" />
+      <OvenDials side="right" />
+
+      <div className="content-wrap relative flex flex-col items-center">
         <Reveal>
           <p className="eyebrow text-terracotta mb-4">Contact</p>
           <h2 className="font-display text-[clamp(2rem,1.55rem+2vw,3.1rem)] text-cream mb-2">

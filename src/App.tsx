@@ -1,6 +1,7 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollThread from "./components/ScrollThread";
+import SuperDuperChat from "./components/SuperDuperChat";
 import Hero from "./components/Hero";
 import Story from "./components/Story";
 import Meaning from "./components/Meaning";
@@ -46,6 +47,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <SuperDuperChat />
     </div>
   );
 }
