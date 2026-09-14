@@ -77,9 +77,14 @@ function Dial({ size, pointerAngle, opacity }: DialProps) {
   );
 }
 
+// The photo's baked-in pointer sits at 12 o'clock (rotation 0), which is
+// dead center of the gap between 300 and OFF — a real dial is never left
+// pointing at blank panel, so these are picked to land cleanly on a
+// printed number well clear of that gap (250 on the left, 50 on the
+// right) rather than at an angle that reads as ambiguous or broken.
 const dials = {
-  left: { size: 176, pointerAngle: -18 },
-  right: { size: 176, pointerAngle: 22 },
+  left: { size: 176, pointerAngle: -71 },
+  right: { size: 176, pointerAngle: 71 },
 };
 
 /**
