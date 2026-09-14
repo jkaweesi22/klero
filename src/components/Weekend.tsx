@@ -1,8 +1,9 @@
 import Reveal from "./Reveal";
 import Button from "./Button";
+import SmokeWisps from "./SmokeWisps";
 import { weekendDrop } from "../data/weekend";
-import weekendDish from "../assets/images/weekend-dish.svg";
-import weekendBake from "../assets/images/weekend-bake.svg";
+import weekendDish from "../assets/images/weekend-dish.jpg";
+import weekendBake from "../assets/images/weekend-bake.jpg";
 
 const details = [
   { label: "Featured Dish", value: weekendDrop.featuredDish },
@@ -17,8 +18,10 @@ const details = [
  */
 export default function Weekend() {
   return (
-    <section id="weekend" className="section-pad bg-cocoa text-cream overflow-hidden">
-      <div className="content-wrap grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
+    <section id="weekend" className="relative section-pad bg-cocoa text-cream overflow-hidden">
+      <SmokeWisps className="inset-y-0 right-[6%] w-[360px] hidden sm:block" count={4} />
+
+      <div className="content-wrap relative grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
         <div>
           <Reveal>
             <p className="eyebrow text-terracotta mb-3">This Weekend at Klero</p>
@@ -57,12 +60,12 @@ export default function Weekend() {
         </div>
 
         <Reveal delay={140} className="relative grid max-w-[420px] mx-auto lg:max-w-none">
-          <img src={weekendDish} alt="This weekend's featured dish" loading="lazy" className="rounded-[22px] aspect-[4/5] object-cover w-full" />
+          <img src={weekendDish} alt="This weekend's featured dish" loading="lazy" className="relative z-10 rounded-[22px] aspect-[4/5] object-cover w-full" />
           <img
             src={weekendBake}
             alt="This weekend's featured bake"
             loading="lazy"
-            className="hidden sm:block absolute w-[46%] -bottom-[8%] -left-[10%] rounded-[22px] border-[6px] border-cocoa shadow-[0_20px_40px_-14px_rgba(0,0,0,0.5)] object-cover aspect-[4/5]"
+            className="z-10 hidden sm:block absolute w-[46%] -bottom-[8%] -left-[10%] rounded-[22px] border-[6px] border-cocoa shadow-[0_20px_40px_-14px_rgba(0,0,0,0.5)] object-cover aspect-[4/5]"
           />
         </Reveal>
       </div>

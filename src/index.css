@@ -110,4 +110,46 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* Rising-warmth "smoke" wisp — see src/components/SmokeWisps.tsx. An
+     abstract soft blur, not a literal steam graphic, per the brand brief. */
+  .smoke-wisp {
+    position: absolute;
+    bottom: -5%;
+    width: 100px;
+    height: 260px;
+    background: radial-gradient(closest-side, rgba(248, 239, 230, 0.85), rgba(232, 178, 140, 0.25) 55%, rgba(232, 178, 140, 0) 75%);
+    filter: blur(11px);
+    border-radius: 50%;
+    opacity: 0;
+    animation-name: smoke-rise;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes smoke-rise {
+    0% {
+      transform: translateY(0) translateX(0) scale(0.8);
+      opacity: 0;
+    }
+    16% {
+      opacity: 0.85;
+    }
+    55% {
+      transform: translateY(-50%) translateX(16px) scale(1.15);
+      opacity: 0.55;
+    }
+    100% {
+      transform: translateY(-100%) translateX(-12px) scale(1.4);
+      opacity: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smoke-wisp {
+    animation: none;
+    opacity: 0.12;
+    transform: none;
+  }
 }

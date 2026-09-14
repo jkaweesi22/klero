@@ -2,7 +2,7 @@ import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Button from "./Button";
 import WhatsAppIcon from "./WhatsAppIcon";
 import { site, whatsappHref } from "../data/site";
-import heroImage from "../assets/images/hero.svg";
+import heroImage from "../assets/images/hero.jpg";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 

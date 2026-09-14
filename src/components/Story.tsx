@@ -1,6 +1,6 @@
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
-import storyImage from "../assets/images/story.svg";
+import storyImage from "../assets/images/story.jpg";
 
 export default function Story() {
   return (

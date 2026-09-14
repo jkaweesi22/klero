@@ -3,14 +3,14 @@
 // photography using the same filenames to avoid touching this file, or
 // point `image` at new files.
 // ---------------------------------------------------------------------------
-import galleryCooking1 from "../assets/images/gallery-cooking-1.svg";
-import galleryCooking2 from "../assets/images/gallery-cooking-2.svg";
-import galleryBaking1 from "../assets/images/gallery-baking-1.svg";
-import galleryBaking2 from "../assets/images/gallery-baking-2.svg";
-import galleryCelebrations1 from "../assets/images/gallery-celebrations-1.svg";
-import galleryFamily1 from "../assets/images/gallery-family-1.svg";
-import galleryFamily2 from "../assets/images/gallery-family-2.svg";
-import galleryTable1 from "../assets/images/gallery-table-1.svg";
+import galleryCooking1 from "../assets/images/gallery-cooking-1.jpg";
+import galleryCooking2 from "../assets/images/gallery-cooking-2.jpg";
+import galleryBaking1 from "../assets/images/gallery-baking-1.jpg";
+import galleryBaking2 from "../assets/images/gallery-baking-2.jpg";
+import galleryCelebrations1 from "../assets/images/gallery-celebrations-1.jpg";
+import galleryFamily1 from "../assets/images/gallery-family-1.jpg";
+import galleryFamily2 from "../assets/images/gallery-family-2.jpg";
+import galleryTable1 from "../assets/images/gallery-table-1.jpg";
 
 export type GalleryCategory = "cooking" | "baking" | "celebrations" | "table" | "family";
 
@@ -33,12 +33,12 @@ export type GalleryItem = {
 };
 
 export const galleryItems: GalleryItem[] = [
-  { image: galleryCooking1, alt: "Placeholder — savory dish being prepared", category: "cooking", caption: "Cooking", size: "tall" },
-  { image: galleryBaking1, alt: "Placeholder — signature cake", category: "baking", caption: "Baking" },
-  { image: galleryTable1, alt: "Placeholder — table set for a gathering", category: "table", caption: "Table Moments", size: "wide" },
-  { image: galleryCelebrations1, alt: "Placeholder — birthday celebration spread", category: "celebrations", caption: "Celebrations" },
-  { image: galleryFamily1, alt: "Placeholder — family-style meal", category: "family", caption: "Family-Style", size: "tall" },
-  { image: galleryBaking2, alt: "Placeholder — fresh pastries", category: "baking", caption: "Baking" },
-  { image: galleryCooking2, alt: "Placeholder — home-cooked meal", category: "cooking", caption: "Cooking", size: "wide" },
-  { image: galleryFamily2, alt: "Placeholder — family gathering", category: "family", caption: "Family-Style" },
+  { image: galleryCooking1, alt: "A home kitchen stovetop with a wok of sautéed vegetables", category: "cooking", caption: "Cooking", size: "tall" },
+  { image: galleryBaking1, alt: "Baking ingredients laid out: flour, eggs, butter, and a rolling pin", category: "baking", caption: "Baking" },
+  { image: galleryTable1, alt: "An elegantly set dining table with candlelight", category: "table", caption: "Table Moments", size: "wide" },
+  { image: galleryCelebrations1, alt: "A celebration cake with a sparkler candle and fresh mandarins", category: "celebrations", caption: "Celebrations" },
+  { image: galleryFamily1, alt: "A baby shower cake reading 'Oh Baby' on a confetti-scattered table", category: "family", caption: "Family-Style", size: "tall" },
+  { image: galleryBaking2, alt: "An overhead grid of fruit-topped tarts", category: "baking", caption: "Baking" },
+  { image: galleryCooking2, alt: "A pan of stir-fried vegetables and greens on the stove", category: "cooking", caption: "Cooking", size: "wide" },
+  { image: galleryFamily2, alt: "A gold 'Congrats' balloon banner strung up for an outdoor celebration", category: "family", caption: "Family-Style" },
 ];

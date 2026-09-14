@@ -1,7 +1,7 @@
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 import Button from "./Button";
-import galleryFamily1 from "../assets/images/gallery-family-1.svg";
+import cateringImage from "../assets/images/catering.jpg";
 
 const occasions = [
   "Birthdays",
@@ -28,8 +28,8 @@ export default function Catering() {
       <div className="content-wrap grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-center">
         <Reveal>
           <img
-            src={galleryFamily1}
-            alt="Small catering spread for a family celebration"
+            src={cateringImage}
+            alt="An outdoor gathering table laid with a small catering spread"
             loading="lazy"
             className="rounded-[22px] aspect-[4/5] object-cover w-full"
           />

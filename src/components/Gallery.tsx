@@ -19,7 +19,7 @@ export default function Gallery() {
           <SectionHeading
             eyebrow="Gallery"
             title="A few moments from the table."
-            description="Cooking, baking, celebrations — and the table moments in between. Replace these placeholders with real photography in src/assets/images/."
+            description="Cooking, baking, celebrations — and the table moments in between. Shown here with stock photography; swap in Klero's own in src/assets/images/ when ready."
           />
         </Reveal>
 
