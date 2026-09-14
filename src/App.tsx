@@ -3,6 +3,7 @@ import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Story from "./components/Story";
 import Meaning from "./components/Meaning";
+import KitchenMontage from "./components/KitchenMontage";
 import Offerings from "./components/Offerings";
 import Weekend from "./components/Weekend";
 import Order from "./components/Order";
@@ -28,6 +29,7 @@ export default function App() {
         <Hero />
         <Story />
         <Meaning />
+        <KitchenMontage />
         <Offerings />
         <Weekend />
         <Order />

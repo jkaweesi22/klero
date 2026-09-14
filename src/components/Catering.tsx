@@ -1,6 +1,7 @@
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 import Button from "./Button";
+import ParallaxImage from "./ParallaxImage";
 import cateringImage from "../assets/images/catering.jpg";
 
 const occasions = [
@@ -27,11 +28,11 @@ export default function Catering() {
     <section id="catering" className="section-pad bg-cream-deep scroll-mt-20">
       <div className="content-wrap grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-center">
         <Reveal>
-          <img
+          <ParallaxImage
             src={cateringImage}
             alt="An outdoor gathering table laid with a small catering spread"
-            loading="lazy"
-            className="rounded-[22px] aspect-[4/5] object-cover w-full"
+            className="rounded-[22px] aspect-[4/5]"
+            distance={30}
           />
         </Reveal>
 

@@ -1,6 +1,7 @@
 import Reveal from "./Reveal";
 import Button from "./Button";
 import SmokeWisps from "./SmokeWisps";
+import ParallaxImage from "./ParallaxImage";
 import { weekendDrop } from "../data/weekend";
 import weekendDish from "../assets/images/weekend-dish.jpg";
 import weekendBake from "../assets/images/weekend-bake.jpg";
@@ -60,7 +61,12 @@ export default function Weekend() {
         </div>
 
         <Reveal delay={140} className="relative grid max-w-[420px] mx-auto lg:max-w-none">
-          <img src={weekendDish} alt="This weekend's featured dish" loading="lazy" className="relative z-10 rounded-[22px] aspect-[4/5] object-cover w-full" />
+          <ParallaxImage
+            src={weekendDish}
+            alt="This weekend's featured dish"
+            className="relative z-10 rounded-[22px] aspect-[4/5]"
+            distance={26}
+          />
           <img
             src={weekendBake}
             alt="This weekend's featured bake"

@@ -1,4 +1,5 @@
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion, type Variants } from "framer-motion";
 import Button from "./Button";
 import WhatsAppIcon from "./WhatsAppIcon";
 import { site, whatsappHref } from "../data/site";
@@ -21,17 +22,33 @@ const item: Variants = {
 
 export default function Hero() {
   const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Scroll-linked (not just on-enter) motion, in the spirit of a large
+  // product-page hero: the photo drifts and the content eases back and
+  // fades slightly as the section scrolls past — continuous motion tied to
+  // scroll position, not a one-off entrance.
+  const { scrollYProgress: exitProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const bgY = useTransform(exitProgress, [0, 1], [0, 130]);
+  const contentY = useTransform(exitProgress, [0, 1], [0, -40]);
+  const contentOpacity = useTransform(exitProgress, [0, 0.7, 1], [1, 1, 0]);
 
   return (
-    <section id="home" className="relative min-h-[92vh] flex items-center overflow-hidden pt-16 pb-20 scroll-mt-20">
+    <section
+      ref={sectionRef}
+      id="home"
+      className="relative min-h-[92vh] flex items-center overflow-hidden pt-16 pb-20 scroll-mt-20"
+    >
       {/* Background image + veil.
           Two overlay layers keep the copy legible wherever it sits, without
           washing the photo out entirely: a strong vertical fade (dominant on
           mobile, where the text column spans nearly the full width) and,
           from `lg` up, an additional horizontal fade that's heaviest behind
           the text column on the left and lightens toward the image on the
-          right — so the photo still reads clearly there. */}
-      <div className="absolute inset-0 z-0" aria-hidden="true">
+          right — so the photo still reads clearly there. The whole group
+          drifts down (bgY) as the section scrolls past, for a subtle
+          parallax depth cue. */}
+      <motion.div className="absolute inset-0 z-0" style={reduceMotion ? undefined : { y: bgY }} aria-hidden="true">
         <motion.img
           src={heroImage}
           alt=""
@@ -42,7 +59,7 @@ export default function Hero() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-cream/72 via-cream/85 to-cream" />
         <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-cream/55 via-cream/15 to-transparent" />
-      </div>
+      </motion.div>
 
       {/* Generational line motif */}
       <div className="absolute inset-x-0 bottom-[14%] h-[200px] z-[1] text-terracotta opacity-35 pointer-events-none" aria-hidden="true">
@@ -64,6 +81,7 @@ export default function Hero() {
         variants={reduceMotion ? undefined : container}
         initial={reduceMotion ? undefined : "hidden"}
         animate={reduceMotion ? undefined : "show"}
+        style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}
       >
         <motion.p variants={reduceMotion ? undefined : item} className="eyebrow text-terracotta mb-2">
           A family food story

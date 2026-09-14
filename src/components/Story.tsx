@@ -1,20 +1,19 @@
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
+import ParallaxImage from "./ParallaxImage";
 import storyImage from "../assets/images/story.jpg";
 
 export default function Story() {
   return (
     <section id="story" className="section-pad scroll-mt-20">
       <div className="content-wrap grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-center">
-        <Reveal as="div" className="order-first lg:order-none group">
-          <div className="rounded-[22px] overflow-hidden aspect-[4/5]">
-            <img
-              src={storyImage}
-              alt="A warm kitchen table set with home-cooked dishes, evoking family gatherings"
-              loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
-            />
-          </div>
+        <Reveal as="div" className="order-first lg:order-none">
+          <ParallaxImage
+            src={storyImage}
+            alt="A warm kitchen table set with home-cooked dishes, evoking family gatherings"
+            className="rounded-[22px] aspect-[4/5]"
+            distance={30}
+          />
           <p className="font-display italic text-brown text-[0.98rem] mt-4">
             A table that has always made room for one more.
           </p>
