@@ -116,20 +116,27 @@ Team, or Enterprise for Pages).
 
 ---
 
-## 5. Adding the Real Klero Logo
+## 5. The Klero Logo
 
-The header and footer currently use a **temporary text wordmark**, rendered by
-`src/components/Logo.tsx`. To replace it with a real logo file once you have one:
+The real logo — `src/assets/logos/klero-logo.png` — is wired in via
+`src/components/Logo.tsx` and used in both the header and footer (and anywhere else a
+brand mark is needed; just render `<Logo />`).
 
-1. Add the file to `src/assets/logos/` (e.g. `klero-logo.svg`)
-2. In `Logo.tsx`, import it — `import kleroLogo from "../assets/logos/klero-logo.svg";`
-3. Replace the `<span className="font-display ...">Klero</span>` with:
-   ```tsx
-   <img src={kleroLogo} alt="Klero" className="h-8 md:h-9 w-auto" />
-   ```
+The logo file itself is never recolored, cropped, or otherwise edited — it's brand
+artwork. `Logo.tsx` only **resizes** it (a fixed height, `width: auto`, so the aspect
+ratio is always preserved) for each placement:
 
-`Logo.tsx` is used in both the header and footer (`tone="light"` there), so the swap
-updates the whole site from one place.
+- `size="lg"` (default, used in the header) — the primary placement
+- `size="md"` (used in the footer) — a tighter spot
+
+Since the logo's fixed brown color reads clearly on light backgrounds (the cream header)
+but has poor contrast directly on dark ones, `tone="light"` (used for dark-background
+placements like the footer) doesn't touch the logo's colors — it sits the unaltered
+image on a small `bg-cream` backing chip instead, so it stays fully legible without ever
+altering the artwork.
+
+To update the logo file itself, replace `src/assets/logos/klero-logo.png` (keep the same
+filename, or update the import path at the top of `Logo.tsx`).
 
 ---
 
@@ -292,8 +299,8 @@ Animations respect `prefers-reduced-motion` throughout (see `Reveal.tsx` and the
 
 - [ ] Replace all placeholder contact details in `src/data/site.ts`
 - [ ] Connect a real form backend via `ORDER_FORM_ENDPOINT` (`src/data/order.ts`)
-- [ ] Replace placeholder SVG imagery in `src/assets/images/` with real photography
-- [ ] Add a real logo file to `src/assets/logos/` and update `Logo.tsx` (§5)
+- [ ] Replace the stock placeholder photography in `src/assets/images/` with real photos
+- [x] Real logo in place (`src/assets/logos/klero-logo.png`, wired via `Logo.tsx` — §5)
 - [ ] Generate and add the favicon/PNG/OG-image set to `public/` (§6)
 - [ ] Update `weekendDrop` in `src/data/weekend.ts` with real current-week details, or
       set `active: false`
