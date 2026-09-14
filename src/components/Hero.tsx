@@ -3,6 +3,7 @@ import Button from "./Button";
 import WhatsAppIcon from "./WhatsAppIcon";
 import { site, whatsappHref } from "../data/site";
 import heroImage from "../assets/images/hero.jpg";
+import kleroLogo from "../assets/logos/klero-logo.png";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -17,54 +18,6 @@ const item: Variants = {
   hidden: { opacity: 0, y: 22 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: easeOut } },
 };
-
-/** The abstract inheritance mark — two flowing lines meeting a stem, drawn once on load. */
-function HeroMark({ reduceMotion }: { reduceMotion: boolean }) {
-  return (
-    <motion.svg
-      viewBox="0 0 120 120"
-      fill="none"
-      className="w-16 h-16 text-terracotta mb-5"
-      aria-hidden="true"
-      initial="hidden"
-      animate="show"
-    >
-      <motion.circle
-        cx="60"
-        cy="60"
-        r="52"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        variants={{ hidden: { pathLength: 0 }, show: { pathLength: 1 } }}
-        transition={{ duration: reduceMotion ? 0 : 1.3, ease: "easeOut", delay: reduceMotion ? 0 : 0.1 }}
-      />
-      <motion.path
-        d="M42 32 L42 88"
-        stroke="currentColor"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        variants={{ hidden: { pathLength: 0 }, show: { pathLength: 1 } }}
-        transition={{ duration: reduceMotion ? 0 : 0.7, ease: "easeOut", delay: reduceMotion ? 0 : 0.85 }}
-      />
-      <motion.path
-        d="M42 62 C 58 62 58 32 78 32"
-        stroke="currentColor"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        variants={{ hidden: { pathLength: 0 }, show: { pathLength: 1 } }}
-        transition={{ duration: reduceMotion ? 0 : 0.7, ease: "easeOut", delay: reduceMotion ? 0 : 1.05 }}
-      />
-      <motion.path
-        d="M42 62 C 58 62 58 88 78 88"
-        stroke="currentColor"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        variants={{ hidden: { pathLength: 0 }, show: { pathLength: 1 } }}
-        transition={{ duration: reduceMotion ? 0 : 0.7, ease: "easeOut", delay: reduceMotion ? 0 : 1.3 }}
-      />
-    </motion.svg>
-  );
-}
 
 export default function Hero() {
   const reduceMotion = useReducedMotion();
@@ -109,15 +62,8 @@ export default function Hero() {
           A family food story
         </motion.p>
 
-        <motion.div variants={reduceMotion ? undefined : item}>
-          <HeroMark reduceMotion={!!reduceMotion} />
-        </motion.div>
-
-        <motion.h1
-          variants={reduceMotion ? undefined : item}
-          className="font-display text-[clamp(3.4rem,2.4rem+5vw,6.4rem)] leading-[0.95] text-cocoa mb-2"
-        >
-          Klero
+        <motion.h1 variants={reduceMotion ? undefined : item} className="mb-5">
+          <img src={kleroLogo} alt="Klero" className="h-16 sm:h-20 md:h-28 w-auto" />
         </motion.h1>
 
         <motion.p
