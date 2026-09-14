@@ -24,17 +24,24 @@ export default function Hero() {
 
   return (
     <section id="home" className="relative min-h-[92vh] flex items-center overflow-hidden pt-16 pb-20 scroll-mt-20">
-      {/* Background image + veil */}
+      {/* Background image + veil.
+          Two overlay layers keep the copy legible wherever it sits, without
+          washing the photo out entirely: a strong vertical fade (dominant on
+          mobile, where the text column spans nearly the full width) and,
+          from `lg` up, an additional horizontal fade that's heaviest behind
+          the text column on the left and lightens toward the image on the
+          right — so the photo still reads clearly there. */}
       <div className="absolute inset-0 z-0" aria-hidden="true">
         <motion.img
           src={heroImage}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-90"
+          className="absolute inset-0 w-full h-full object-cover opacity-90 blur-[2px]"
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 0.9, scale: 1.04 }}
           transition={{ duration: reduceMotion ? 0 : 2.2, ease: easeOut }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-cream/35 via-cream/65 to-cream" />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream/72 via-cream/85 to-cream" />
+        <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-cream/55 via-cream/15 to-transparent" />
       </div>
 
       {/* Generational line motif */}
