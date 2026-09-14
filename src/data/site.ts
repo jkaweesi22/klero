@@ -10,7 +10,7 @@
 
 export const site = {
   name: "Klero",
-  tagline: "Food carried forward.",
+  tagline: "Heritage carried forward.",
   phone: "+1 (555) 123-4567",
   phoneHref: "tel:+15551234567",
   whatsappNumber: "15551234567", // digits only, no + or spaces, for wa.me

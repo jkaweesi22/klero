@@ -1,4 +1,4 @@
-# Klero — Food Carried Forward
+# Klero — Heritage Carried Forward
 
 A premium, single-page website for **Klero**, a cooking-and-baking brand built on the
 Greek idea of inheritance — recipes, hospitality, and tradition carried from one
@@ -174,7 +174,7 @@ Edit the `site` object in **`src/data/site.ts`**:
 ```ts
 export const site = {
   name: "Klero",
-  tagline: "Food carried forward.",
+  tagline: "Heritage carried forward.",
   phone: "+1 (555) 123-4567",
   phoneHref: "tel:+15551234567",
   whatsappNumber: "15551234567",
