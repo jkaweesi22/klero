@@ -1,5 +1,6 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ScrollThread from "./components/ScrollThread";
 import Hero from "./components/Hero";
 import Story from "./components/Story";
 import Meaning from "./components/Meaning";
@@ -24,6 +25,7 @@ export default function App() {
       </a>
 
       <Header />
+      <ScrollThread />
 
       <main id="main-content" className="flex-1">
         <Hero />
