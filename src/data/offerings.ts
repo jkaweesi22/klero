@@ -6,13 +6,13 @@
 import galleryCooking1 from "../assets/images/gallery-cooking-1.jpg";
 import galleryCooking2 from "../assets/images/gallery-cooking-2.jpg";
 import galleryBaking1 from "../assets/images/gallery-baking-1.jpg";
-import galleryBaking2 from "../assets/images/gallery-baking-2.jpg";
 import galleryCelebrations1 from "../assets/images/gallery-celebrations-1.jpg";
 import galleryFamily1 from "../assets/images/gallery-family-1.jpg";
 import galleryFamily2 from "../assets/images/gallery-family-2.jpg";
 import galleryTable1 from "../assets/images/gallery-table-1.jpg";
 import weekendDish from "../assets/images/weekend-dish.jpg";
 import weekendBake from "../assets/images/weekend-bake.jpg";
+import raisinCake from "../assets/images/raisin-cake.jpg";
 
 export type OfferItem = {
   name: string;
@@ -68,11 +68,11 @@ export const offerCategories: OfferCategory[] = [
         alt: "Baking ingredients laid out: flour, eggs, butter, and a rolling pin",
       },
       {
-        name: "Pastries",
-        description: "Small batch, baked the morning of pickup.",
+        name: "Raisin Cake",
+        description: "Our signature pastry — the one people ask for by name.",
         price: "from $—",
-        image: galleryBaking2,
-        alt: "An overhead grid of fruit-topped tarts",
+        image: raisinCake,
+        alt: "A sliced raisin loaf cake dusted with powdered sugar",
       },
       {
         name: "Celebration Bakes",
