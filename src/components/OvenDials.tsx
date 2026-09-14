@@ -2,7 +2,7 @@ import ovenDial from "../assets/oven-dial.webp";
 
 type DialProps = {
   size: number;
-  pointerAngle: number;
+  ringRotation: number;
   opacity: number;
 };
 
@@ -10,9 +10,9 @@ const CENTER = 50;
 const toRad = (deg: number) => (deg * Math.PI) / 180;
 const pointOn = (r: number, deg: number) => [CENTER + r * Math.cos(toRad(deg)), CENTER + r * Math.sin(toRad(deg))] as const;
 
-// A gap at the bottom between OFF and 300 — same "off position" a real
-// dial leaves at 6 o'clock — so the printed scale reads as an oven face,
-// not a full clock dial.
+// A gap at the top between 300 and OFF — same "off position" a real
+// dial leaves — so the printed scale reads as an oven face, not a full
+// clock dial.
 const GAP_DEG = 34;
 const TICK_COUNT = 32;
 const LABELS = ["OFF", "50", "100", "150", "200", "250", "300"];
@@ -20,18 +20,25 @@ const LABELS = ["OFF", "50", "100", "150", "200", "250", "300"];
 /**
  * A real oven-dial photograph (a brushed-steel knob, cropped tight to its
  * knurled bezel with the surrounding control panel masked to transparency)
- * set into a printed temperature scale — tick marks and numbers, drawn as
- * SVG so they stay upright and legible rather than spinning with the
- * knob. On a real appliance the panel print is fixed and only the knob
- * itself turns, so `pointerAngle` rotates just the photo, never the ring
- * around it. A drop-shadow lifts the knob off the flat cocoa background
- * the way the panel it was photographed on originally would.
+ * set into a printed temperature scale.
+ *
+ * The photo is never rotated. It's a genuine perspective shot — the
+ * knurled bezel is only visible along one edge, which is what reads as
+ * "this knob physically protrudes from the panel" — and spinning that
+ * around its center swings the ridge to wherever the rotation happens to
+ * land, breaking the one consistent camera/light angle the depth cue
+ * depends on. Its printed indicator line is fixed pointing straight up.
+ * To make it look "set" to a given number, the printed scale rotates
+ * underneath it instead (`ringRotation`) — safe to spin freely since it's
+ * flat SVG with no perspective to break — with each tick/label angle
+ * offset individually rather than the whole ring wrapped in one rotated
+ * `<g>`, so the number glyphs stay upright instead of spinning with it.
  */
-function Dial({ size, pointerAngle, opacity }: DialProps) {
+function Dial({ size, ringRotation, opacity }: DialProps) {
   const startAngle = -90 + GAP_DEG / 2;
   const sweep = 360 - GAP_DEG;
-  const ticks = Array.from({ length: TICK_COUNT }, (_, i) => startAngle + (sweep * i) / (TICK_COUNT - 1));
-  const labelAngles = LABELS.map((_, i) => startAngle + (sweep * i) / (LABELS.length - 1));
+  const ticks = Array.from({ length: TICK_COUNT }, (_, i) => startAngle + (sweep * i) / (TICK_COUNT - 1) + ringRotation);
+  const labelAngles = LABELS.map((_, i) => startAngle + (sweep * i) / (LABELS.length - 1) + ringRotation);
 
   return (
     <div className="relative" style={{ width: size, height: size, opacity }}>
@@ -67,24 +74,22 @@ function Dial({ size, pointerAngle, opacity }: DialProps) {
         alt=""
         width={size * 0.56}
         height={size * 0.56}
-        className="absolute top-1/2 left-1/2"
-        style={{
-          transform: `translate(-50%, -50%) rotate(${pointerAngle}deg)`,
-          filter: "drop-shadow(0 3px 5px rgba(0,0,0,0.45))",
-        }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        style={{ filter: "drop-shadow(0 3px 5px rgba(0,0,0,0.45))" }}
       />
     </div>
   );
 }
 
-// The photo's baked-in pointer sits at 12 o'clock (rotation 0), which is
-// dead center of the gap between 300 and OFF — a real dial is never left
-// pointing at blank panel, so these are picked to land cleanly on a
-// printed number well clear of that gap (250 on the left, 50 on the
-// right) rather than at an angle that reads as ambiguous or broken.
+// The photo's fixed indicator points straight up (12 o'clock), dead
+// center of the gap between 300 and OFF — a real dial is never left
+// pointing at blank panel, so the ring is rotated until a real number
+// sits under that fixed pointer instead: 250 on the left, 50 on the
+// right — a plausible, deliberately-set pair rather than a knob caught
+// mid-turn.
 const dials = {
-  left: { size: 176, pointerAngle: -71 },
-  right: { size: 176, pointerAngle: 71 },
+  left: { size: 176, ringRotation: 71.33 },
+  right: { size: 176, ringRotation: -71.33 },
 };
 
 /**
