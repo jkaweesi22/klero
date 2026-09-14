@@ -10,13 +10,19 @@ import raisinCake from "../assets/images/raisin-cake.jpg";
  * viewport size, since the image already fills its container and is
  * simply being "un-masked").
  *
- * Mechanism: the section is much taller than the viewport (220vh). Its
- * content is `sticky top-0 h-screen`, so it stays put while that extra
- * height is consumed by scrolling — framer-motion's useScroll reports
- * 0→1 progress across exactly that span, which drives the clip-path,
- * heading fade, and caption fade. Once the container's height is used up,
- * the sticky element releases naturally and Offerings scrolls up over it —
- * no manual hand-off needed.
+ * Mechanism: the section is taller than the viewport (150vh). Its content
+ * is `sticky top-0 h-screen`, so it stays put while that extra height is
+ * consumed by scrolling — framer-motion's useScroll reports 0→1 progress
+ * across exactly that span, which drives the clip-path, heading fade, and
+ * caption fade. Once the container's height is used up, the sticky
+ * element releases naturally and Offerings scrolls up over it — no manual
+ * hand-off needed.
+ *
+ * 150vh, not more: an earlier 220vh version measured out at roughly 5x the
+ * scroll input of a normal section to clear, landing right after three
+ * already-substantial sections (Hero, Story, Meaning) — it read as the
+ * page "getting stuck" rather than a deliberate pause. If this still
+ * feels long, this is the one number to turn down further.
  *
  * Deliberately used once, for the brand's specific signature item, rather
  * than as a recurring pattern — a technique like this loses its impact
@@ -76,7 +82,7 @@ export default function SignatureReveal() {
   }
 
   return (
-    <section ref={ref} className="relative h-[220vh]" aria-label="Klero's signature raisin cake">
+    <section ref={ref} className="relative h-[150vh]" aria-label="Klero's signature raisin cake">
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-cream">
         <motion.div
           style={{ opacity: headingOpacity, y: headingY }}
