@@ -1,0 +1,18 @@
+<svg width="900" height="1125" viewBox="0 0 900 1125" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weekend Bake placeholder image">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#B87352"/>
+      <stop offset="100%" stop-color="#6B412D"/>
+    </linearGradient>
+    <radialGradient id="r" cx="50%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#3E2723" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#3E2723" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="900" height="1125" fill="url(#g)"/>
+  <rect width="900" height="1125" fill="url(#r)"/>
+  <circle cx="702" cy="202" r="234" fill="#F8EFE6" opacity="0.06"/>
+  <circle cx="108" cy="990" r="180" fill="#3E2723" opacity="0.15"/>
+  <path d="M0,787 C 270,675 540,922 900,731" stroke="#F8EFE6" stroke-opacity="0.18" stroke-width="2" fill="none"/>
+  <text x="45" y="1080" font-family="Georgia, 'Iowan Old Style', serif" font-style="italic" font-size="27" fill="#F8EFE6" opacity="0.55">Klero — Weekend Bake</text>
+</svg>
