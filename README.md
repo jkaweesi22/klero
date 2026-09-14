@@ -4,7 +4,11 @@ A premium, single-page website for **Klero**, a cooking-and-baking brand built o
 Greek idea of inheritance — recipes, hospitality, and tradition carried from one
 generation to the next.
 
-Static HTML/CSS/vanilla JS. No build step, no framework. Ready to deploy to GitHub Pages.
+Built with **Vite + React + TypeScript + Tailwind CSS v4**, animated with
+**framer-motion** and **animate.css**, icons from **lucide-react**, linted with
+**oxlint** — the same stack as [Liven](https://github.com/jkaweesi22/Liven), kept to a
+single anchor-navigated page rather than a routed multi-page app (see §9). Ready to
+deploy to GitHub Pages via GitHub Actions.
 
 ---
 
@@ -12,37 +16,47 @@ Static HTML/CSS/vanilla JS. No build step, no framework. Ready to deploy to GitH
 
 ```
 /
-├── index.html                  Single-page site (all sections)
-├── styles.css                  All styles (CSS variables, components, responsive, animation)
-├── script.js                   Business info config, form logic, nav, scroll reveal, gallery filter
+├── index.html                  Vite entry HTML (meta tags, fonts, #root, %BASE_URL%)
+├── vite.config.ts              Vite + React + Tailwind plugin config, GitHub Pages `base`
+├── package.json                Scripts & dependencies
+├── tsconfig*.json              TypeScript project references (app + node)
+├── .oxlintrc.json              Linter config
 ├── README.md                   This file
-├── .nojekyll                   Tells GitHub Pages not to run Jekyll processing
-├── assets/
-│   ├── images/                 Placeholder SVG imagery (hero, story, gallery, weekend drop)
-│   ├── logos/                  Reserved for the real Klero logo file (see §5)
-│   └── icons/                  Favicon set (see §6)
+├── src/
+│   ├── main.tsx                App entry — mounts <App /> into #root
+│   ├── App.tsx                 Assembles the single page from section components
+│   ├── index.css               Tailwind import, @theme brand tokens, base/utility layers
+│   ├── components/              Header, Footer, Hero, Story, Offerings, OrderForm, etc.
+│   ├── data/                    Editable content: site.ts, weekend.ts, offerings.ts,
+│   │                            gallery.ts, testimonials.ts, values.ts, order.ts
+│   └── assets/
+│       ├── images/             Placeholder SVG imagery, imported directly by components
+│       └── logos/               Reserved for the real Klero logo file (see §5)
+├── public/                      Files served as-is at the site root (favicon, manifest)
 └── .github/
     └── workflows/
-        └── deploy.yml          GitHub Actions → GitHub Pages deployment
+        └── deploy.yml           GitHub Actions → GitHub Pages (build + deploy)
 ```
-
-All asset references in `index.html` and `styles.css` use **relative paths**
-(`assets/...`, not `/assets/...`), so the site works correctly whether it's deployed at
-`https://username.github.io/` or `https://username.github.io/repository-name/`.
 
 ---
 
-## 2. Local Preview
-
-Any static file server works. From the project root:
+## 2. Local Development
 
 ```bash
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-Then open **http://localhost:8000** in your browser.
+Then open the URL Vite prints (typically **http://localhost:5173/klero/** — note the
+`/klero/` path, which mirrors the production subdirectory; see §4).
 
-(Node alternative: `npx serve .`)
+Other scripts:
+
+```bash
+npm run build     # type-check (tsc -b) + production build to dist/
+npm run preview   # serve the production build locally
+npm run lint      # oxlint
+```
 
 ---
 
@@ -64,8 +78,8 @@ Replace `<REPOSITORY_URL>` with your GitHub repository's URL
 
 ## 4. GitHub Pages Deployment
 
-This repo already includes `.github/workflows/deploy.yml`, which deploys the site
-automatically via GitHub Actions on every push to `main`.
+`.github/workflows/deploy.yml` builds the project with Node 20 (`npm ci && npm run
+build`) and deploys the `dist/` output via GitHub Actions on every push to `main`.
 
 **One-time setup, after your first push:**
 
@@ -73,8 +87,18 @@ automatically via GitHub Actions on every push to `main`.
 2. Go to **Pages** (left sidebar, under "Code and automation")
 3. Under **Build and deployment → Source**, select **GitHub Actions**
 4. Push to `main` (or re-run the workflow from the **Actions** tab)
-5. The workflow will build and publish automatically — the live URL appears in the
+5. The workflow builds and publishes automatically — the live URL appears in the
    workflow run summary and on the Pages settings screen once deployment finishes
+
+### The `base` path — important
+
+GitHub Pages serves a project repository from a subdirectory:
+`https://<username>.github.io/<repository-name>/`. **`vite.config.ts` sets `base:
+'/klero/'` to match this repository's name.** If you rename the repository or fork it
+under a different name, update that value to match — otherwise every built asset URL
+will 404 and the deployed page will render blank. `index.html` uses Vite's `%BASE_URL%`
+placeholder (not hardcoded root-absolute paths) for every file in `/public`, so it stays
+correct automatically once `base` is set right.
 
 This works whether the repository is public or private (private repos need GitHub Pro,
 Team, or Enterprise for Pages).
@@ -86,54 +110,48 @@ Team, or Enterprise for Pages).
 2. At your domain registrar, add either:
    - an `A` record pointing to GitHub's Pages IPs, or
    - a `CNAME` record pointing to `your-username.github.io`
-3. Wait for DNS to propagate, then enable **Enforce HTTPS** in the Pages settings
+3. Once on a custom domain, set `base: '/'` in `vite.config.ts` (a custom domain is
+   served from the root, not a repository subdirectory)
+4. Wait for DNS to propagate, then enable **Enforce HTTPS** in the Pages settings
 
 ---
 
 ## 5. Adding the Real Klero Logo
 
-The header and footer currently use a **temporary text wordmark**:
+The header and footer currently use a **temporary text wordmark**, rendered by
+`src/components/Logo.tsx`. To replace it with a real logo file once you have one:
 
-```html
-<!-- in index.html, inside <header class="site-header"> -->
-<span class="wordmark-text">Klero</span>
-```
-
-To replace it with a real logo image once you have one:
-
-1. Add your logo file to `assets/logos/` (e.g. `assets/logos/klero-logo.svg`)
-2. In `index.html`, swap the `<span class="wordmark-text">Klero</span>` line for:
-   ```html
-   <img src="assets/logos/klero-logo.svg" alt="Klero" class="wordmark-img">
+1. Add the file to `src/assets/logos/` (e.g. `klero-logo.svg`)
+2. In `Logo.tsx`, import it — `import kleroLogo from "../assets/logos/klero-logo.svg";`
+3. Replace the `<span className="font-display ...">Klero</span>` with:
+   ```tsx
+   <img src={kleroLogo} alt="Klero" className="h-8 md:h-9 w-auto" />
    ```
-3. Do the same in the footer (`.footer-wordmark`) if desired
 
-The `.wordmark-img` style in `styles.css` already constrains logo height so it stays
-proportional next to the nav.
+`Logo.tsx` is used in both the header and footer (`tone="light"` there), so the swap
+updates the whole site from one place.
 
 ---
 
-## 6. Favicons
+## 6. Favicons & Social Image
 
-`index.html` already references a full favicon set at `assets/icons/`. Two files exist
-today:
+`index.html` references a favicon set and an Open Graph image via Vite's `%BASE_URL%`
+placeholder, resolved against `/public`. Two files exist today:
 
-- `assets/icons/favicon.svg` — a real, working scalable favicon (the temporary Klero mark)
-- `assets/icons/site.webmanifest` — web app manifest referencing the PNG sizes below
+- `public/favicon.svg` — a real, working scalable favicon (the temporary Klero mark)
+- `public/site.webmanifest` — web app manifest referencing the PNG sizes below
 
 The following are **referenced but not yet generated** (browsers that don't support SVG
 favicons will simply show no icon until these are added — this does not break the site):
 
-- `assets/icons/favicon.ico`
-- `assets/icons/favicon-16x16.png`
-- `assets/icons/favicon-32x32.png`
-- `assets/icons/apple-touch-icon.png` (180×180)
-- `assets/icons/android-chrome-192x192.png`
-- `assets/icons/android-chrome-512x512.png`
+- `public/apple-touch-icon.png` (180×180)
+- `public/android-chrome-192x192.png`
+- `public/android-chrome-512x512.png`
+- `public/og-image.png` — used for social share previews (Open Graph / Twitter Card)
 
-**To generate them:** upload `assets/icons/favicon.svg` (or your final logo) to a tool
-like [realfavicongenerator.net](https://realfavicongenerator.net), download the output,
-and drop the files into `assets/icons/` using the exact filenames above.
+**To generate the favicon set:** upload `public/favicon.svg` (or your final logo) to a
+tool like [realfavicongenerator.net](https://realfavicongenerator.net), download the
+output, and drop the files into `public/` using the exact filenames above.
 
 ---
 
@@ -144,30 +162,35 @@ invented.** Update it in one place and it propagates across the whole site.
 
 ### Contact details, WhatsApp, Instagram, service area
 
-Edit the `BUSINESS_INFO` object near the top of **`script.js`**:
+Edit the `site` object in **`src/data/site.ts`**:
 
-```js
-const BUSINESS_INFO = {
-  phoneDisplay: "+1 (555) 123-4567",
-  phoneHref: "+15551234567",
+```ts
+export const site = {
+  name: "Klero",
+  tagline: "Food carried forward.",
+  phone: "+1 (555) 123-4567",
+  phoneHref: "tel:+15551234567",
   whatsappNumber: "15551234567",
   whatsappMessage: "Hello Klero, I'd like to place an order request.",
   email: "hello@klero.example",
+  emailHref: "mailto:hello@klero.example",
   instagramHandle: "@klero.kitchen",
   instagramUrl: "https://instagram.com/klero.kitchen",
   serviceArea: "Serving [City, Region] — pickup and select local delivery",
+  copyrightYear: new Date().getFullYear(),
 };
 ```
 
 Every phone number, WhatsApp link, email link, Instagram link, and the service-area line
-across the header, hero, Order section, and footer read from this single object.
+across the header, hero, Order section, Contact section, and footer read from this one
+object.
 
 ### This Weekend at Klero
 
-Edit the `WEEKEND_DROP` object, also near the top of **`script.js`**:
+Edit the `weekendDrop` object in **`src/data/weekend.ts`**:
 
-```js
-const WEEKEND_DROP = {
+```ts
+export const weekendDrop = {
   active: true,               // set to false to hide the drop and show a fallback message
   featuredDish: "Braised short rib tray (serves 4–6)",
   featuredBake: "Spiced honey layer cake",
@@ -178,81 +201,105 @@ const WEEKEND_DROP = {
 
 ### Order Request Form → connecting a real backend
 
-This is a static site with no server, so the form currently runs in **demo mode**: it
-validates input and shows a confirmation message, but does not send data anywhere.
+This is a static site with no server, so the form (`src/components/OrderForm.tsx`)
+currently runs in **demo mode**: it validates input and shows a confirmation message,
+but does not send data anywhere.
 
-The single place to connect it is the `ORDER_FORM_ENDPOINT` constant in `script.js`:
+The single place to connect it is `ORDER_FORM_ENDPOINT` in **`src/data/order.ts`**:
 
-```js
-const ORDER_FORM_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+```ts
+export const ORDER_FORM_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
 ```
 
 - **Formspree** (recommended, zero backend code): create a form at
   [formspree.io](https://formspree.io), replace the placeholder URL above with your real
-  endpoint. The `<form>` tag's `action` attribute in `index.html` is kept in sync with
-  this constant automatically at runtime.
+  endpoint. `OrderForm.tsx`'s `<form action={ORDER_FORM_ENDPOINT}>` and its `fetch()`
+  submit handler both read from this constant automatically.
 - **Netlify Forms**: add `data-netlify="true"` and a hidden `form-name` input to the
-  `<form>` in `index.html`, then deploy on Netlify instead of (or alongside) GitHub Pages.
-- **EmailJS**: remove the `action` attribute and call `emailjs.sendForm()` inside the
-  submit handler in `script.js` (see `initOrderForm()`).
+  `<form>` in `OrderForm.tsx`, then deploy on Netlify instead of (or alongside) GitHub
+  Pages.
+- **EmailJS**: replace the `fetch()` call in `OrderForm.tsx`'s `handleSubmit` with
+  `emailjs.sendForm()`.
 - **Supabase / a custom API**: point `ORDER_FORM_ENDPOINT` at your endpoint and adjust
-  the `fetch()` call inside `initOrderForm()` to match your API's request/response shape.
+  the `fetch()` call in `OrderForm.tsx` to match your API's request/response shape.
 
 ### Menu items & prices
 
-Offerings are hand-written cards inside the `#offerings` section of `index.html`
-(grouped into Signature Meals, Baked Goods, Celebrations, Small Catering). Each card is a
-self-contained `<article class="offer-card">` block — copy, edit, or remove them freely;
-no other file needs to change. Prices are intentionally left as `$—` placeholders.
+Offerings live in **`src/data/offerings.ts`** as a typed array of categories and items
+(Signature Meals, Baked Goods, Celebrations, Small Catering). Add, edit, or remove
+entries there — `Offerings.tsx` renders whatever the array contains, so no component
+code needs to change. Prices are intentionally left as `$—` placeholders.
 
 ### Photography
 
-All imagery is currently **placeholder SVG art** in `assets/images/` (soft brand-colored
-gradients, clearly labeled). Replace them with real photography using the same filenames
-to avoid editing HTML, or update the `src` attributes in `index.html` to new filenames.
+All imagery is currently **placeholder SVG art** in `src/assets/images/` (soft
+brand-colored gradients, clearly labeled), imported and referenced from
+`src/data/offerings.ts` and `src/data/gallery.ts`. Replace the files using the same
+filenames to avoid touching those data files, or update the import paths there.
 
 ---
 
 ## 8. Sample Testimonials
 
-The testimonials in `#testimonials` are explicitly marked as **sample content** in an
-HTML comment directly above the section in `index.html`. They are not real customer
-quotes. Replace them with genuine testimonials once available, or delete the entire
-`<section class="testimonials">` block (and remove its data if unused) until then.
+The testimonials in `src/data/testimonials.ts` are explicitly marked as **sample
+content** in a comment at the top of that file. They are not real customer quotes.
+Replace the array's contents with genuine testimonials once available, or remove the
+`<Testimonials />` import and usage in `src/App.tsx` to hide the section until then.
 
 ---
 
-## 9. Design System Reference
+## 9. Architecture Notes
 
-CSS custom properties (in `:root`, top of `styles.css`):
+- **Single page, anchor navigation.** Klero's brief calls for one polished page rather
+  than a routed multi-page site, so — unlike Liven — there is no `react-router-dom`
+  dependency or `HashRouter`. `Header.tsx` and `Footer.tsx` link to in-page section ids
+  (`#story`, `#offerings`, …) defined in `src/data/site.ts`'s `navLinks`.
+- **`Reveal`** (`src/components/Reveal.tsx`) is the scroll-reveal primitive used
+  throughout: it wraps content in an animate.css entrance animation the first time it
+  scrolls into view, with a built-in fallback so content is never left stuck invisible
+  (reduced-motion, unsupported browsers, or an observer that never fires all force a
+  reveal). Wrap new sections/cards in `<Reveal>` rather than adding bespoke animation
+  logic.
+- **`Button`** (`src/components/Button.tsx`) is a small polymorphic component: pass
+  `href` for any link (in-page anchor, `tel:`, `mailto:`, `wa.me`) or omit it for a
+  native `<button>`.
+- Brand colors and fonts are Tailwind v4 `@theme` tokens in `src/index.css` — they
+  generate utilities directly (`bg-terracotta`, `text-cocoa`, `font-display`, …).
+
+---
+
+## 10. Design System Reference
+
+Brand tokens (`@theme` block, top of `src/index.css`):
 
 ```css
---color-cocoa: #3E2723;
---color-brown: #6B412D;
---color-terracotta: #B87352;
---color-cream: #F8EFE6;
---color-olive: #556B2F;
+--color-cocoa: #3e2723;
+--color-brown: #6b412d;
+--color-terracotta: #b87352;
+--color-cream: #f8efe6;
+--color-olive: #556b2f;
 ```
 
 Typography: **Fraunces** (serif, headings/editorial) + **Inter** (sans, body/UI), loaded
 from Google Fonts in `index.html`.
 
-Animations respect `prefers-reduced-motion`; when enabled, transitions and scroll-reveal
-effects are effectively disabled and all content is shown in place.
+Animations respect `prefers-reduced-motion` throughout (see `Reveal.tsx` and the
+`@media` rule in `src/index.css`).
 
 ---
 
-## 10. Pre-Launch Checklist
+## 11. Pre-Launch Checklist
 
-- [ ] Replace all placeholder contact details in `BUSINESS_INFO` (`script.js`)
-- [ ] Connect a real form backend via `ORDER_FORM_ENDPOINT` (`script.js`)
-- [ ] Replace placeholder SVG imagery in `assets/images/` with real photography
-- [ ] Add a real logo file to `assets/logos/` and update the wordmark markup (§5)
-- [ ] Generate and add the favicon/PNG set to `assets/icons/` (§6)
-- [ ] Update `WEEKEND_DROP` with real current-week details, or set `active: false`
+- [ ] Replace all placeholder contact details in `src/data/site.ts`
+- [ ] Connect a real form backend via `ORDER_FORM_ENDPOINT` (`src/data/order.ts`)
+- [ ] Replace placeholder SVG imagery in `src/assets/images/` with real photography
+- [ ] Add a real logo file to `src/assets/logos/` and update `Logo.tsx` (§5)
+- [ ] Generate and add the favicon/PNG/OG-image set to `public/` (§6)
+- [ ] Update `weekendDrop` in `src/data/weekend.ts` with real current-week details, or
+      set `active: false`
 - [ ] Replace or remove the sample testimonials (§8)
-- [ ] Update Open Graph / Twitter meta image in `index.html` once real photography exists
-- [ ] Review offerings copy and pricing in the `#offerings` section
+- [ ] Review offerings copy and pricing in `src/data/offerings.ts`
+- [ ] Confirm `base` in `vite.config.ts` matches your actual repository name
 
 ---
 
