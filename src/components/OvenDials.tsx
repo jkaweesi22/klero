@@ -4,50 +4,79 @@ type DialProps = {
   opacity: number;
 };
 
-/** A single abstract dial — a ringed circle with rim ticks and a pointer, echoing an oven control knob without being a literal illustration of one. */
+const CENTER = 50;
+const toRad = (deg: number) => (deg * Math.PI) / 180;
+const pointOn = (r: number, deg: number) => [CENTER + r * Math.cos(toRad(deg)), CENTER + r * Math.sin(toRad(deg))] as const;
+
+// Real stove/oven knobs don't turn a full circle — there's a gap at the
+// bottom for OFF. Sweeping ticks across ~260° (rather than all 360°) is
+// what actually reads as "oven dial" instead of "clock" or "gauge".
+const SWEEP_START = -220;
+const SWEEP_END = 40;
+const TICK_COUNT = 9;
+
+/**
+ * A single oven/stove control knob: outer bezel, a knurled grip edge
+ * (dense short ticks around the full rim), a gapped setting scale with
+ * major/minor ticks, and a solid pointer wedge at the current setting —
+ * the actual anatomy of a real dial, not an abstracted clock face.
+ */
 function Dial({ size, angle, opacity }: DialProps) {
-  const rad = (angle * Math.PI) / 180;
+  const knurls = Array.from({ length: 36 }, (_, i) => i * 10);
+  const ticks = Array.from({ length: TICK_COUNT }, (_, i) => SWEEP_START + ((SWEEP_END - SWEEP_START) * i) / (TICK_COUNT - 1));
+
+  const [tipX, tipY] = pointOn(43, angle);
+  const perp = angle + 90;
+  const [b1X, b1Y] = [
+    CENTER + 24 * Math.cos(toRad(angle)) + 3.2 * Math.cos(toRad(perp)),
+    CENTER + 24 * Math.sin(toRad(angle)) + 3.2 * Math.sin(toRad(perp)),
+  ];
+  const [b2X, b2Y] = [
+    CENTER + 24 * Math.cos(toRad(angle)) - 3.2 * Math.cos(toRad(perp)),
+    CENTER + 24 * Math.sin(toRad(angle)) - 3.2 * Math.sin(toRad(perp)),
+  ];
+
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" className="text-cream" style={{ opacity }} aria-hidden="true">
-      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="2" />
-      <circle cx="50" cy="50" r="3" fill="currentColor" />
-      <line
-        x1="50"
-        y1="50"
-        x2={50 + 34 * Math.cos(rad)}
-        y2={50 + 34 * Math.sin(rad)}
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-      {[0, 45, 90, 135, 180, 225, 270, 315].map((tick) => {
-        const tRad = (tick * Math.PI) / 180;
-        return (
-          <line
-            key={tick}
-            x1={50 + 40 * Math.cos(tRad)}
-            y1={50 + 40 * Math.sin(tRad)}
-            x2={50 + 46 * Math.cos(tRad)}
-            y2={50 + 46 * Math.sin(tRad)}
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
-        );
+      {/* outer bezel */}
+      <circle cx={CENTER} cy={CENTER} r="47.5" fill="none" stroke="currentColor" strokeWidth="1.3" />
+
+      {/* knurled grip edge */}
+      {knurls.map((deg) => {
+        const [x1, y1] = pointOn(44.5, deg);
+        const [x2, y2] = pointOn(47.5, deg);
+        return <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="0.8" />;
       })}
+
+      {/* setting scale, gapped at the bottom (the "off" position) */}
+      {ticks.map((deg, i) => {
+        const isMajor = i === 0 || i === TICK_COUNT - 1 || i === Math.floor(TICK_COUNT / 2);
+        const [x1, y1] = pointOn(isMajor ? 33 : 37, deg);
+        const [x2, y2] = pointOn(42.5, deg);
+        return <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth={isMajor ? 1.8 : 1.1} />;
+      })}
+
+      {/* the knob face */}
+      <circle cx={CENTER} cy={CENTER} r="24" fill="none" stroke="currentColor" strokeWidth="1.2" />
+
+      {/* pointer wedge, aimed at the current setting */}
+      <polygon points={`${tipX},${tipY} ${b1X},${b1Y} ${b2X},${b2Y}`} fill="currentColor" />
+
+      <circle cx={CENTER} cy={CENTER} r="3" fill="currentColor" />
     </svg>
   );
 }
 
 const dialSets = {
   left: [
-    { size: 72, angle: 205, opacity: 0.16 },
-    { size: 100, angle: 35, opacity: 0.12 },
-    { size: 54, angle: 300, opacity: 0.19 },
+    { size: 76, angle: -140, opacity: 0.18 },
+    { size: 104, angle: -40, opacity: 0.13 },
+    { size: 58, angle: 10, opacity: 0.2 },
   ],
   right: [
-    { size: 60, angle: 150, opacity: 0.18 },
-    { size: 96, angle: 320, opacity: 0.13 },
-    { size: 76, angle: 60, opacity: 0.16 },
+    { size: 64, angle: -180, opacity: 0.19 },
+    { size: 100, angle: -60, opacity: 0.14 },
+    { size: 80, angle: 0, opacity: 0.17 },
   ],
 };
 
